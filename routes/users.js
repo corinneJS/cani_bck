@@ -10,7 +10,9 @@ const bcrypt = require('bcrypt');
 
 
 router.get('/hello', (req, res) => {
-  res.json({ result: false, message: 'Hello world' });
+  User.findOne({ email: req.body.email }).then(data => {
+    res.json({ result: true, data: data });
+  });
 })
 
 
