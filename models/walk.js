@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
-const photoSchema = mongoose.Schema({
+const itinerarySchema = mongoose.Schema({
   uri: String,
   name: String,
   isProfilPhoto: Boolean,
  });
 
-const userSchema = mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-  token: String,
-  dateCreated: Date,
-  dateModified: Date,
+const walkSchema = mongoose.Schema({
+  name: String,
+  environnement: String,
+  rythme: String,
+  distance: Number,
+  description: String,
+  itineraries: [itinerarySchema],
   firstname: String,
   lastname: String,
   birthdate: Date,
@@ -23,6 +23,6 @@ const userSchema = mongoose.Schema({
   photos: [photoSchema],  
 });
 
-const User = mongoose.model('users', userSchema);
+const Walk = mongoose.model('walks', walkSchema);
 
-module.exports = User;
+module.exports = Walk;

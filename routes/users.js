@@ -8,6 +8,12 @@ const { checkBody } = require('../modules/checkBody');
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
+
+router.get('/hello', (req, res) => {
+  res.json({ result: false, message: 'Hello world' });
+})
+
+
 router.post('/signup', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
   if (!checkBody(req.body, ['username','email', 'password'])) {
