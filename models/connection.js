@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const connectionString = 'mongodb+srv://canniconnect:FullSt4ck@cluster0.dgcnj19.mongodb.net/caniconnect';
+const connectionString = process.env.CONNECTION_STRING;
 
-mongoose.connect('mongodb+srv://canniconnect:FullSt4ck@cluster0.dgcnj19.mongodb.net/caniconnect', { connectTimeoutMS: 2000 })
+mongoose.connect(connectionString, { connectTimeoutMS: 2000 })
   .then(() => console.log('Database connected'))
   .catch(error => console.error(error));
 
