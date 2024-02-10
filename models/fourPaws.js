@@ -1,19 +1,25 @@
 const mongoose = require('mongoose');
 
+const dogPhotoSchema = mongoose.Schema({
+  uri: String,
+  name: String,
+  isProfilPhoto: Boolean,
+ });
+
 const fourPawSchema = mongoose.Schema({
-  userID: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-  dateCreated: Date,
-  dateModified: Date,
   name: String,
   birthdate: Date,
-  breed: String,
   gender: String,
   isSterilized: Boolean,
   charactere: String,
   activity: String,
-  photos: [photoSchema],  
+  dateCreated: Date,
+  dateModified: Date,
+  dogPhotos: [dogPhotoSchema], 
+  userID: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+  breedID: { type: mongoose.Schema.Types.ObjectId, ref: 'breeds' }, 
 });
 
-const FourPaw = mongoose.model('users', fourPawSchema);
+const FourPaw = mongoose.model('fourPaws', fourPawSchema);
 
 module.exports = FourPaw;

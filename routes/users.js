@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt');
 
 
 router.get('/hello', (req, res) => {
-  User.findOne({ email: req.body.email }).then(data => {
+  User.find().then(data => {
     res.json({ result: true, data: data });
   });
 })
@@ -17,7 +17,14 @@ router.get('/hello', (req, res) => {
 
 router.post('/signup', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
-  if (!checkBody(req.body, ['username','email', 'password'])) {
+  if (!checkBody(req.body, [
+    'username',
+    'email', 
+    'password', 
+    'isDogOwner', 
+    'isProfessional',
+    'city',  
+  ])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -33,6 +40,16 @@ router.post('/signup', (req, res) => {
         email: req.body.email,
         password: hash,
         token: token,
+        firstname: "",
+        lastname: "",
+        birthdate: new Date,
+        city: req.body.city,
+        dateCreated: new Date,
+        dateModified: new Date,
+        isDogOwner: req.body.isDogOwner,
+        isProfessional: req.body.isProfessional,
+        isDeactivated: false,
+        photos: [],
       });
 
       newUser.save().then(newDoc => {
