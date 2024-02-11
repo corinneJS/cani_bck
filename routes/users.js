@@ -17,7 +17,7 @@ router.get('/hello', (req, res) => {
 
 router.post('/signup', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
-  if (!checkBody(req.body, [
+  /* if (!checkBody(req.body, [
     'username',
     'email', 
     'password', 
@@ -27,10 +27,11 @@ router.post('/signup', (req, res) => {
   ])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
-  }
+  } */
 
   // Check if the user has not already been registered
   User.findOne({ email: req.body.email }).then(data => {
+    console.log("user allready exist",data)
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
       const token = uid2(32);
@@ -51,6 +52,7 @@ router.post('/signup', (req, res) => {
         isDeactivated: false,
         photos: [],
       });
+      console.log("new user", newUser)
 
       newUser.save().then(newDoc => {
         res.json({ result: true, token: newDoc.token });
