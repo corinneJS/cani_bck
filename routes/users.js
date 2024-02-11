@@ -21,13 +21,22 @@ router.post('/signup', (req, res) => {
     'username',
     'email', 
     'password', 
-    'isDogOwner', 
-    'isProfessional',
     'city',  
   ])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
+
+  const valueOfIsDogOwner = true;
+  if (req.body.isDogOwner === true || req.body.isDogOwner === false){
+    valueOfIsDogOwner = req.body.isDogOwner;
+  } 
+
+  const valueOfIsProfessional = false;
+  if (req.body.isProfessional === true || req.body.isProfessional === false){
+    valueOfIsProfessional = req.body.isProfessional;
+  } 
+  
 
   // Check if the user has not already been registered
   User.findOne({ email: req.body.email }).then(data => {
@@ -46,8 +55,8 @@ router.post('/signup', (req, res) => {
         city: req.body.city,
         dateCreated: new Date,
         dateModified: new Date,
-        isDogOwner: req.body.isDogOwner,
-        isProfessional: req.body.isProfessional,
+        isDogOwner: valueOfIsDogOwner,
+        isProfessional: valueOfIsProfessional,
         isDeactivated: false,
         photos: [],
       });
