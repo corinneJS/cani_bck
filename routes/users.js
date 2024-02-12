@@ -17,7 +17,7 @@ router.get('/hello', (req, res) => {
 
 router.post('/signup', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
-  /* if (!checkBody(req.body, [
+  if (!checkBody(req.body, [
     'username',
     'email', 
     'password', 
@@ -25,7 +25,7 @@ router.post('/signup', (req, res) => {
   ])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
-  } */
+  }
 
   const valueOfIsDogOwner = true;
   if (req.body.isDogOwner === true || req.body.isDogOwner === false){
