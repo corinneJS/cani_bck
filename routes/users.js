@@ -8,7 +8,7 @@ const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
 
-router.get('/hello', (req, res) => {
+router.get('/', (req, res) => {
   User.find().then(data => {
     res.json({ result: true, data: data });
   });
