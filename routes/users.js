@@ -27,12 +27,12 @@ router.post('/signup', (req, res) => {
     return;
   }
 
-  const valueOfIsDogOwner = true;
+  let valueOfIsDogOwner = true;
   if (req.body.isDogOwner === true || req.body.isDogOwner === false){
     valueOfIsDogOwner = req.body.isDogOwner;
   } 
 
-  const valueOfIsProfessional = false;
+  let valueOfIsProfessional = false;
   if (req.body.isProfessional === true || req.body.isProfessional === false){
     valueOfIsProfessional = req.body.isProfessional;
   } 
