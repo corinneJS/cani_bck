@@ -6,7 +6,7 @@ const dogPhotoSchema = mongoose.Schema({
   isProfilPhoto: Boolean,
  });
 
-const fourPawSchema = mongoose.Schema({
+const dogSchema = mongoose.Schema({
   name: String,
   birthdate: Date,
   gender: String,
@@ -20,6 +20,6 @@ const fourPawSchema = mongoose.Schema({
   breedID: { type: mongoose.Schema.Types.ObjectId, ref: 'breeds' }, 
 });
 
-const FourPaw = mongoose.model('fourPaws', fourPawSchema);
+const Dog = mongoose.model('dogs', dogSchema);
 
 module.exports = FourPaw;
