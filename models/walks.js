@@ -12,7 +12,7 @@ const walkSchema = mongoose.Schema({
   rythme: String,
   distance: Number,
   description: String,
-  duration : String,
+  duration : Number,
   dateCreated: Date,
   dateModified: Date,
   itinerary: [itineraryPointSchema],
