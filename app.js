@@ -9,6 +9,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var walksRouter = require('./routes/walks');
+var breedsRouter = require("./routes/breeds");
+var dogsRouter = require("./routes/dogs");
+var traitsRouter = require('./routes/traits');
 
 var app = express();
 const cors = require('cors');
@@ -23,5 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/walks', walksRouter);
+app.use("/dogs", dogsRouter);
+app.use("/breeds", breedsRouter);
+app.use("/traits", traitsRouter);
 
 module.exports = app;
