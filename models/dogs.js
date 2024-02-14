@@ -2,24 +2,24 @@ const mongoose = require('mongoose');
 
 const dogPhotoSchema = mongoose.Schema({
   uri: String,
-  name: String,
+  dogPhotoName: String,
   isProfilPhoto: Boolean,
  });
-
+ 
 const dogSchema = mongoose.Schema({
-  name: String,
+  dogName: String,
   birthdate: Date,
-  gender: String,
+  isFemale: Boolean,
   isSterilized: Boolean,
-  charactere: String,
-  activity: String,
+  traitID: [{ type: mongoose.Schema.Types.ObjectId, ref: "traits" }],
+  activityID: [{ type: mongoose.Schema.Types.ObjectId, ref: "activities" }],
   dateCreated: Date,
   dateModified: Date,
-  dogPhotos: [dogPhotoSchema], 
-  userID: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-  breedID: { type: mongoose.Schema.Types.ObjectId, ref: 'breeds' }, 
+  dogPhotos: [dogPhotoSchema],
+  userID: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+  breedID: { type: mongoose.Schema.Types.ObjectId, ref: "breeds" },
 });
 
 const Dog = mongoose.model('dogs', dogSchema);
 
-module.exports = FourPaw;
+module.exports = Dog;
