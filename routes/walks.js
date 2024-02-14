@@ -72,7 +72,7 @@ router.post('/create', (req, res) => {
         itinerary: valueOfItinerary,
         userID: data._id,
       });
-      console.log("new walk", newWalk)
+      console.log("new walk", newWalk);
 
       newWalk.save().then(newDoc => {
         res.json({ result: true, ID: newDoc._id });
