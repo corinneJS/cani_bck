@@ -8,6 +8,7 @@ const dogPhotoSchema = mongoose.Schema({
  
 const dogSchema = mongoose.Schema({
   dogName: String,
+  description: String,
   birthdate: Date,
   isFemale: Boolean,
   isSterilized: Boolean,

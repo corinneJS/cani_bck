@@ -63,7 +63,19 @@ router.post('/signup', (req, res) => {
       console.log("new user", newUser)
 
       newUser.save().then(newDoc => {
-        res.json({ result: true, token: newDoc.token });
+        res.json({
+          result: true,
+          response: {
+            isConnect: true,
+            username: newDoc.username,
+            userID:newDoc.userID,
+            email: newDoc.email,
+            isOwnerDog: newDoc.isOwnerDog,
+            isProfessional: newDoc.isProfessional,
+            city: newDoc.city,
+            token: newDoc.token,
+          },
+        });
       });
     } else {
       // User already exists in database
@@ -80,7 +92,15 @@ router.post('/signin', (req, res) => {
 
   User.findOne({ email: req.body.email }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token });
+      res.json({ result: true, user: {
+      isConnect : data.isConnect,
+      username : data.username,
+      userID: data._id,
+      email : data.email,
+      isOwnerDog : data.isOwnerDog,
+      isProfessional : data.isProfessional,
+      city : data.city,
+      token: data.token }});
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
