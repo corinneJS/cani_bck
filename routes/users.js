@@ -70,7 +70,7 @@ router.post('/signup', (req, res) => {
             username: newDoc.username,
             userID:newDoc.userID,
             email: newDoc.email,
-            isOwnerDog: newDoc.isOwnerDog,
+            isDogOwner: newDoc.isDogOwner,
             isProfessional: newDoc.isProfessional,
             city: newDoc.city,
             token: newDoc.token,
@@ -93,11 +93,11 @@ router.post('/signin', (req, res) => {
   User.findOne({ email: req.body.email }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, user: {
-      isConnect : data.isConnect,
+      isConnect : true,
       username : data.username,
       userID: data._id,
       email : data.email,
-      isOwnerDog : data.isOwnerDog,
+      isDogOwner : data.isDogOwner,
       isProfessional : data.isProfessional,
       city : data.city,
       token: data.token }});
