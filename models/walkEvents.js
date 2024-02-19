@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const walkEventSchema = mongoose.Schema({
   eventName: String,
-  eventDate: Date,
-  eventTime: Date,
+  eventDate: String,
+  eventTime: String,
   eventCity: String,
   dateCreated: Date,
   dateModified: Date,
