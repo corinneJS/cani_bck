@@ -4,6 +4,7 @@ const walkEventSchema = mongoose.Schema({
   eventName: String,
   eventDate: Date,
   eventTime: Date,
+  eventCity: String,
   dateCreated: Date,
   dateModified: Date,
   walkID : { type: mongoose.Schema.Types.ObjectId, ref: 'fourPaws' },
