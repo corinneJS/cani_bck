@@ -74,8 +74,30 @@ router.post('/create', (req, res) => {
       });
       console.log("new walk", newWalk);
 
-      newWalk.save().then(newDoc => {
-        res.json({ result: true, ID: newDoc._id });
+      newWalk.save().then(newWalkDoc => {
+        //res.json({ result: true, ID: newDoc._id });
+        if (!checkBody(req.body, [
+          'eventName',
+          'eventDate', 
+          'eventTime', 
+          'eventCity', 
+        ])) {
+          res.json({ result: false, error: 'Missing or empty fields' });
+          return;
+        }
+        const newWalkEvent = new WalkEvent ({
+          eventName: req.body.eventName,
+          eventDate: req.body.eventDate,
+          eventTime: req.body.eventTime,
+          eventCity: req.body.eventCity,
+          dateCreated: new Date,
+          walkID : newWalkDoc._id,
+        });
+        newWalkEvent.save().then(newWalkEventDoc => {
+          console.log("new walk:", newWalk, "new walkEvent:", newWalkEvent );
+          res.json({ result: true, walkdID: newWalkDoc._id, walkEventID: newWalkEventDoc._id });          
+        });
+
       });
     }
   });
