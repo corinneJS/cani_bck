@@ -23,6 +23,24 @@ router.get('/allwalkevents', (req, res) => {
   });
 })
 
+router.get("/walkevent/:cityName", (req, res) => {
+  WalkEvent.find({
+    eventCity: { $regex: new RegExp(req.params.cityName, "i") },
+  }).then(dataWalkEvents => {
+    if (dataWalkEvents === null) {
+      res.json({ result: false, error: "No walk in this city found" });
+    } else {
+      let numberOfElements = dataWalkEvents.length;
+      let dataWalk = [];
+      dataWalkEvents.map( walkEvent =>
+      Walk.findById(walkEvent.walkID).then(walk => {
+        dataWalk.push(walk);
+       }));
+      res.json({ result: true, walkEvents: dataWalkEvents, walks: dataWalk });
+    }
+  });
+});
+
 router.post('/create', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
   if (!checkBody(req.body, [
