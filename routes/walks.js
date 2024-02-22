@@ -24,22 +24,44 @@ router.get('/allwalkevents', (req, res) => {
 })
 
 router.get("/walkevent/:cityName", (req, res) => {
-  WalkEvent.find({
-    eventCity: { $regex: new RegExp(req.params.cityName, "i") },
-  }).then(dataWalkEvents => {
-    if (dataWalkEvents === null) {
-      res.json({ result: false, error: "No walk in this city found" });
-    } else {
-      let numberOfElements = dataWalkEvents.length;
-      let dataWalk = [];
-      dataWalkEvents.map( walkEvent =>
-      Walk.findById(walkEvent.walkID).then(walk => {
-        dataWalk.push(walk);
-       }));
-      res.json({ result: true, walkEvents: dataWalkEvents, walks: dataWalk });
-    }
-  });
+  if (!req.params.cityName) {
+    res.json({ result: false, error: 'No valid city has been send' });
+  } else {
+    WalkEvent.find({
+      eventCity: { $regex: new RegExp(req.params.cityName, "i") },
+    }).then(dataWalkEvents => {
+      if (dataWalkEvents === null) {
+        res.json({ result: false, error: "No walkEvent in this city found" });
+      } else {
+        /* const dataWalks = [];
+        dataWalkEvents.forEach ( (walkEvent) =>
+              Walk.findById(walkEvent.walkID).then(walk => {
+                dataWalks.push(walk);
+              })
+        );
+        console.log("dataWalks:", dataWalks); */
+        res.json({ result: true, walkEvents: dataWalkEvents });
+      }
+    });
+  }
+  
 });
+
+router.get("/getWalkById/:id", (req, res) => {
+  if (!req.params.id) {
+    res.json({ result: false, error: 'No valid id has been send' });
+  } else {
+    Walk.findById(req.params.id).then(walk => {
+      if (walk === null) {
+        res.json({ result: false, error: "No walk found" });
+      } else {
+        res.json({ result: true, walk: walk });
+      }
+    });
+  }  
+});
+
+
 
 router.post('/create', (req, res) => {
   // CheckBody functions checks that there are fields username, email and passwords in req.body
