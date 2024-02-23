@@ -29,17 +29,12 @@ router.get("/walkevent/:cityName", (req, res) => {
   } else {
     WalkEvent.find({
       eventCity: { $regex: new RegExp(req.params.cityName, "i") },
-    }).then(dataWalkEvents => {
+    }).populate('walkID')
+      .populate('dogIDs')
+      .then(dataWalkEvents => {
       if (dataWalkEvents === null) {
         res.json({ result: false, error: "No walkEvent in this city found" });
       } else {
-        /* const dataWalks = [];
-        dataWalkEvents.forEach ( (walkEvent) =>
-              Walk.findById(walkEvent.walkID).then(walk => {
-                dataWalks.push(walk);
-              })
-        );
-        console.log("dataWalks:", dataWalks); */
         res.json({ result: true, walkEvents: dataWalkEvents });
       }
     });
