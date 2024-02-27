@@ -14,6 +14,11 @@ var dogsRouter = require("./routes/dogs");
 var traitsRouter = require('./routes/traits');
 
 var app = express();
+// CP : gestion des uploads de fichiers photos
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
+
+
 const cors = require('cors');
 app.use(cors());
 
