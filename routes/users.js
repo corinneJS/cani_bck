@@ -107,4 +107,24 @@ router.post('/signin', (req, res) => {
   });
 });
 
+// update user
+router.put("/updateUser/:userID", async (req, res) => {
+   try {
+    const userID = req.params.userID;
+    const update = req.body;
+    console.log("Reception infoUser du Frontend",update);
+    const options = { new: true }; // Pour retourner le document modifié
+
+    const updatedUser = await User.findOneAndUpdate({ _id: userID }, update, options);
+     console.log("UpdateUser, retour updatedUser", updatedUser);   
+     if (!updatedUser) {
+        return res.json({ result: false, error: "updateuser pb" });  
+     }    
+      return res.json({ result: true, user: updatedUser });;
+        } catch (error){
+          res.json({ result: false, error});
+        }
+      });
+
+
 module.exports = router;
