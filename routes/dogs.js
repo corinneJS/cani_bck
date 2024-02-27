@@ -19,11 +19,65 @@ router.get("/first_fromuser/:userID", (req, res) => {
       res.json({ result: true, dog: data });
       return;
     }
-    res.json({ result: false, error: "dog not found" });
+    res.json({ result: false, error: "Veuillez ajouter un 4pattes" });
   });
   
   
 })
+
+// POST new Dog 
+// ajout dog
+router.post("/addDog", (req, res) => {
+  // Check if the dog has not already been registered
+  Dog.findOne({ dogName : req.body.dogName, userID:req.body.userID })
+  .then((data) => {
+    if (data === null) {
+      const newDog = new Dog({
+        dogName: req.body.dogName,
+        description: req.body.description,
+        birthdate: req.body.birthdate,
+        isFemale: req.body.isFemale,
+        isSterilized: req.body.isSterilized,
+        dateCreated: Date,
+        dateModified: Date,
+        traitID: req.body.traitID,
+        activityID: req.body.activityID,
+        userID: req.body.userID,
+        breedID: req.body.breedID,
+        dogPhotos: req.body.dogPhotos,
+      });
+
+      newDog.save().then(() => {
+        res.json({ result: true});
+      });
+    } else {
+      // Dog already exists in database
+      res.json({ result: false, error: "Dog already exists" });
+    }
+  });
+});
+
+// update dog
+router.put("/updateDog/:dogID", async (req, res) => {
+   try {
+    const dogID = req.params.dogID;
+    const update = req.body;
+    console.log("Reception infoDog du Frontend",update);
+    const options = { new: true }; // Pour retourner le document modifié
+
+    const updatedDog = await Dog.findOneAndUpdate({ _id: dogID }, update, options);
+     console.log("UpdateDog, retour updatedDog", updatedDog);   
+     if (!updatedDog) {
+        return res.json({ result: false, error: "updatedog pb" });  
+     }    
+      return res.json({ result: true, dog: updatedDog });;
+        } catch (error){
+          res.json({ result: false, error});
+        }
+      });
+
+
+
 
 
 router.post("/create", (req,res) => {
