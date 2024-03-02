@@ -18,7 +18,10 @@ router.get('/allwalks', (req, res) => {
 })
 
 router.get('/allwalkevents', (req, res) => {
-  WalkEvent.find().then(data => {
+  WalkEvent.find()
+  .populate('walkID')
+  .populate('dogIDs')
+  .then(data => {
     res.json({ result: true, data: data });
   });
 })
