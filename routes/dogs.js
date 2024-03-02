@@ -71,10 +71,10 @@ router.put("/updateDog/:dogID", async (req, res) => {
         return res.json({ result: false, error: "updatedog pb" });  
      }    
       return res.json({ result: true, dog: updatedDog });;
-        } catch (error){
+    } catch (error){
           res.json({ result: false, error});
-        }
-      });
+    }
+  });
 
 
 

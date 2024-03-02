@@ -42,6 +42,30 @@ router.get("/walkevent/:cityName", (req, res) => {
   
 });
 
+router.get("/history/:dogID", async (req, res) => {
+  try {
+    const dogID = req.params.dogID;
+    console.log("Reception dogID du Frontend", dogID);
+    if (!dogID) {
+      res.json({ result: false, error: "No dog register for a promenade" });
+    } else {
+      const lstWalkEvents = await WalkEvent.find({ dogIDs: { $in: req.params.dogID } })
+      console.log("lstWalkEvents, retour find", lstWalkEvents);   
+      if (!lstWalkEvents) {
+            res.json({
+              result: false,
+              error: "No walkEvent for this dog",
+            });
+          } else {
+            res.json({ result: true, event: dataWalkEvents });
+          }
+        }
+      
+  } catch (error) {
+    res.json({ result: false, error });
+  }
+});
+
 router.get("/getWalkById/:id", (req, res) => {
   if (!req.params.id) {
     res.json({ result: false, error: 'No valid id has been send' });
