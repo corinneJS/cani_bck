@@ -6,6 +6,46 @@ require("../models/connection");
 const Dog = require("../models/dogs");
 
 
+// get dig by ID
+router.get("/getdogbyid/:id", (req, res) => {
+  if (!req.params.id) {
+    res.json({ result: false, error: 'No valid id has been send' });
+  } else {
+    Dog.findById(req.params.id)
+    .populate('userID')
+    .populate('breedID')
+    .then(dog => {
+      if (dog === null) {
+        res.json({ result: false, error: "No walk found" });
+      } else {
+        dogID = dog._id;
+        dogName = dog.dogName;
+        isFemale = dog.isFemale 
+        photoUri = dog.dogPhotos.uri;
+        userID = dog.userID._id;
+        username = dog.userID.username;
+        userPhoto = dog.userID.photos;
+        breedID = dog.breedID._id;
+        breedNameFR = dog.breedID.breedNameFR;
+        breedNameEN = dog.breedID.breedNameEN;
+
+        res.json({ result: true, dog: {
+          dogID,
+          dogName,
+          isFemale, 
+          photoUri,
+          userID,
+          username,
+          userPhoto,
+          breedID,
+          breedNameEN,
+          breedNameFR,
+        }});
+      }
+    });
+  }  
+});
+
 // GET le 1er 4pattes par userID
 // 
 router.get("/first_fromuser/:userID", (req, res) => {
