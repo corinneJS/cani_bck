@@ -16,7 +16,7 @@ router.get("/getdogbyid/:id", (req, res) => {
     .populate('breedID')
     .then(dog => {
       if (dog === null) {
-        res.json({ result: false, error: "No walk found" });
+        res.json({ result: false, error: "No dog with this id found" });
       } else {
         dogID = dog._id;
         dogName = dog.dogName;

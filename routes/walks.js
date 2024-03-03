@@ -33,7 +33,13 @@ router.get("/walkevent/:cityName", (req, res) => {
     WalkEvent.find({
       eventCity: { $regex: new RegExp(req.params.cityName, "i") },
     }).populate('walkID')
-      .populate('dogIDs')
+      // Ci-dessous, on effectue un populate de DogIDs avec les champs userID et breedID
+      .populate({path:'dogIDs', 
+      populate: {
+        path: 'userID breedID', // Liste des champs à populate dans le modèle Dog
+        model: 'User Breed', // Liste des noms de modèles des champs à populate ci-desus en respectant l'ordre
+      }}
+      )
       .then(dataWalkEvents => {
       if (dataWalkEvents === null) {
         res.json({ result: false, error: "No walkEvent in this city found" });
