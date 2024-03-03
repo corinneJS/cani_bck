@@ -113,6 +113,10 @@ router.post('/create', (req, res) => {
   if (Array.isArray(req.body.itinerary) && req.body.itinerary.length >= 1){
     valueOfItinerary = req.body.itinerary;
   } 
+  let valueOfDogID = "";
+  if (req.body.dogID){
+    valueOfDogID = req.body.dogID;
+  } 
   
   // Token is used to search userID and username of user who created the walk
   User.findOne({ token: req.body.token }).then(data => {
@@ -154,6 +158,8 @@ router.post('/create', (req, res) => {
           eventCity: req.body.eventCity,
           dateCreated: new Date,
           walkID : newWalkDoc._id,
+          dogIDs: valueOfDogID && dogIDs.push(valueOfDogID),
+          registeredUsersIDs: registeredUsersIDs.push(data._id),
         });
         newWalkEvent.save().then(newWalkEventDoc => {
           console.log("new walk:", newWalk, "new walkEvent:", newWalkEvent );
@@ -165,5 +171,64 @@ router.post('/create', (req, res) => {
   });
 });
 
+// To register a user and its dog(s) to a walkEvent
+router.post('/register', (req, res) => {
+  // CheckBody functions checks that there are fields username, email and passwords in req.body
+  if (!checkBody(req.body, [
+    'eventID',
+    'token', 
+    'dogID', 
+  ])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+  
+  // Token is used to search userID and username of user to register
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user === null) {
+      // The search with the token has not found any user !
+      res.json({ result: false, error: "no user has been found with this token" });
+      
+    } else {
+    // Ici, on cherche si le user est déjà inscrit, c'est-à-dire si l'ID du user se trouve dans
+    // registeredUsersIDs
+      WalkEvent.findOne({ id: req.body.eventID }).then(event => {
+        if (event === null) {
+          // The search with the eventID has not found any event !
+          res.json({ result: false, error: "no walkEvent has been found with this ID" });
+        } else {
+          // si le user._id est contenu dans registeredUsersIDs, le user est déjà inscrit
+          if (event.registeredUsersIDs.includes(user._id)) {
+            res.json({ result: false, error: "User is already registered to this event" });
+          } else {
+            // Si le user n'est pas déjà inscrit, on l'inscrit
+            WalkEvent.updateOne(
+              {_id: req.body.eventID},
+              {registeredUsersIDs: registeredUsersIDs.push(user._id) },
+              ).then(() => {
+                WalkEvent.find().then(event => {
+                    console.log(event);
+                });
+            });
+          }
+          // Ici, on vérifie si le chien est déjà inscrit
+          if (event.dogIDs.includes(req.body.dogID)) {
+            res.json({ result: false, error: "Dog is already registered to this event" });
+          } else {
+            // Si le chien n'est pas déjà inscrit, on l'inscrit
+            WalkEvent.updateOne(
+              {_id: req.body.eventID},
+              {dogIDs: dogIDs.push(req.body.dogID) },
+              ).then(() => {
+                WalkEvent.find().then(event => {
+                    console.log(event);
+                });
+            });
+          }
+        }
+      })
+    }
+  })
+});
 
 module.exports = router;

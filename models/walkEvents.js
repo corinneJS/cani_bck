@@ -9,6 +9,7 @@ const walkEventSchema = mongoose.Schema({
   dateModified: Date,
   walkID: { type: mongoose.Schema.Types.ObjectId, ref: 'walks' },
   dogIDs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'dogs' }],
+  registeredUsersIDs: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
 });
 
 const WalkEvent = mongoose.model('walkEvents', walkEventSchema );
