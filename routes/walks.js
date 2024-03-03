@@ -158,16 +158,20 @@ router.post('/create', (req, res) => {
           eventCity: req.body.eventCity,
           dateCreated: new Date,
           walkID : newWalkDoc._id,
-          //dogIDs: valueOfDogID && dogIDs.push(valueOfDogID),
-          //dogIDs: valueOfDogID && WalkEvent.dogIDs.update( { $addToSet: { valueOfDogID } } ),
-          dogIDs: valueOfDogID && WalkEvent.dogIDs.update( valueOfDogID ),
-          registeredUsersIDs: WalkEvent.registeredUsersIDs.update(data._id),
         });
+        // On inscrit le dog du user à la promenade
+        if (valueOfDogID) {
+          newWalkEvent.dogIDs = newWalkEvent.dogIDs || [];  // On s'assure que l'array est initialisé
+          newWalkEvent.dogIDs.push(valueOfDogID);
+        }
+        // On inscrit le user à la promenade qu'il a crée
+        newWalkEvent.registeredUsersIDs = newWalkEvent.registeredUsersIDs || []; // On s'assure que l'array est initialisé
+        newWalkEvent.registeredUsersIDs.push(data._id);
+
         newWalkEvent.save().then(newWalkEventDoc => {
           console.log("new walk:", newWalk, "new walkEvent:", newWalkEvent );
           res.json({ result: true, walkdID: newWalkDoc._id, walkEventID: newWalkEventDoc._id });          
         });
-
       });
     }
   });
@@ -184,6 +188,10 @@ router.post('/register', (req, res) => {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
+  let valueOfDogID = "";
+  if (req.body.dogID){
+    valueOfDogID = req.body.dogID;
+  } 
   
   // Token is used to search userID and username of user to register
   User.findOne({ token: req.body.token }).then(user => {
@@ -194,40 +202,35 @@ router.post('/register', (req, res) => {
     } else {
     // Ici, on cherche si le user est déjà inscrit, c'est-à-dire si l'ID du user se trouve dans
     // registeredUsersIDs
-      WalkEvent.findOne({ id: req.body.eventID }).then(event => {
+      WalkEvent.findById( req.body.eventID ).then(event => {
         if (event === null) {
           // The search with the eventID has not found any event !
           res.json({ result: false, error: "no walkEvent has been found with this ID" });
+          return;
         } else {
           // si le user._id est contenu dans registeredUsersIDs, le user est déjà inscrit
-          if (event.registeredUsersIDs.includes(user._id)) {
+          if (Array.isArray(event.registeredUsersIDs) && event.registeredUsersIDs.includes(user._id)) {
             res.json({ result: false, error: "User is already registered to this event" });
           } else {
             // Si le user n'est pas déjà inscrit, on l'inscrit
-            WalkEvent.updateOne(
-              {_id: req.body.eventID},
-              {registeredUsersIDs: registeredUsersIDs.push(user._id) },
-              ).then(() => {
-                WalkEvent.find().then(event => {
-                    console.log(event);
-                });
-            });
+            event.registeredUsersIDs = event.registeredUsersIDs || []; // On s'assure que l'array est initialisé
+            event.registeredUsersIDs.push(user._id);
           }
           // Ici, on vérifie si le chien est déjà inscrit
-          if (event.dogIDs.includes(req.body.dogID)) {
+          if (Array.isArray(event.dogIDs) && event.dogIDs.includes(req.body.dogID)) {
             res.json({ result: false, error: "Dog is already registered to this event" });
           } else {
             // Si le chien n'est pas déjà inscrit, on l'inscrit
-            WalkEvent.updateOne(
-              {_id: req.body.eventID},
-              {dogIDs: dogIDs.push(req.body.dogID) },
-              ).then(() => {
-                WalkEvent.find().then(event => {
-                    console.log(event);
-                });
-            });
+            // On inscrit le dog du user à la promenade
+            if (valueOfDogID) {
+              event.dogIDs = event.dogIDs || [];  // On s'assure que l'array est initialisé
+              event.dogIDs.push(valueOfDogID);
+            }
           }
         }
+        event.save().then(eventDoc => {
+          res.json({ result: true, eventID: eventDoc._id, dogIDs: eventDoc.dogIDs, registeredUsersIDs: eventDoc.registeredUsersIDs });          
+        });
       })
     }
   })
