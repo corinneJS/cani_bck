@@ -158,8 +158,10 @@ router.post('/create', (req, res) => {
           eventCity: req.body.eventCity,
           dateCreated: new Date,
           walkID : newWalkDoc._id,
-          dogIDs: valueOfDogID && dogIDs.push(valueOfDogID),
-          registeredUsersIDs: registeredUsersIDs.push(data._id),
+          //dogIDs: valueOfDogID && dogIDs.push(valueOfDogID),
+          //dogIDs: valueOfDogID && WalkEvent.dogIDs.update( { $addToSet: { valueOfDogID } } ),
+          dogIDs: valueOfDogID && WalkEvent.dogIDs.update( valueOfDogID ),
+          registeredUsersIDs: WalkEvent.registeredUsersIDs.update(data._id),
         });
         newWalkEvent.save().then(newWalkEventDoc => {
           console.log("new walk:", newWalk, "new walkEvent:", newWalkEvent );
