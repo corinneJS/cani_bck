@@ -25,9 +25,6 @@ router.get("/getdogbyid/:id", (req, res) => {
         userID = dog.userID._id;
         username = dog.userID.username;
         userPhoto = dog.userID.photos;
-        breedID = dog.breedID._id;
-        breedNameFR = dog.breedID.breedNameFR;
-        breedNameEN = dog.breedID.breedNameEN;
 
         res.json({ result: true, dog: {
           dogID,
@@ -37,9 +34,6 @@ router.get("/getdogbyid/:id", (req, res) => {
           userID,
           username,
           userPhoto,
-          breedID,
-          breedNameEN,
-          breedNameFR,
         }});
       }
     });

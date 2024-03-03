@@ -8,6 +8,8 @@ var router = express.Router();
 const Walk = require('../models/walks');
 const WalkEvent = require('../models/walkEvents');
 const User = require('../models/users');
+const Dog = require("../models/dogs");
+const Breed = require("../models/breeds");
 const { checkBody } = require('../modules/checkBody');
 
 
@@ -35,11 +37,10 @@ router.get("/walkevent/:cityName", (req, res) => {
     }).populate('walkID')
       // Ci-dessous, on effectue un populate de DogIDs avec les champs userID et breedID
       .populate({path:'dogIDs', 
-      populate: {
-        path: 'userID breedID', // Liste des champs à populate dans le modèle Dog
-        model: 'User Breed', // Liste des noms de modèles des champs à populate ci-desus en respectant l'ordre
-      }}
-      )
+        populate: {
+          path: 'breedID' //  champs à populate dans le modèle Dog / Si on ajoute 2 champs à populate, seul le 2ème est pris en compte
+        },
+      })
       .then(dataWalkEvents => {
       if (dataWalkEvents === null) {
         res.json({ result: false, error: "No walkEvent in this city found" });
