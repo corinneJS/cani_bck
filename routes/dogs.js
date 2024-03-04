@@ -18,18 +18,18 @@ router.get("/getdogbyid/:id", (req, res) => {
       if (dog === null) {
         res.json({ result: false, error: "No dog with this id found" });
       } else {
+        dogID = dog._id;
         dogName = dog.dogName;
         isFemale = dog.isFemale 
         photoUri = dog.dogPhotos.uri;
-        userID = dog.userID._id;
         username = dog.userID.username;
         userPhoto = dog.userID.photos;
 
         res.json({ result: true, dog: {
+          dogID,
           dogName,
           isFemale, 
           photoUri,
-          userID,
           username,
           userPhoto,
         }});
