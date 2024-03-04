@@ -38,7 +38,7 @@ router.get("/walkevent/:cityName", (req, res) => {
       // Ci-dessous, on effectue un populate de DogIDs avec les champs userID et breedID
       .populate({path:'dogIDs', 
         populate: {
-          path: 'breedID' //  champs à populate dans le modèle Dog / Si on ajoute 2 champs à populate, seul le 2ème est pris en compte
+          path: 'breedID userID' //  champs à populate dans le modèle Dog / Si on ajoute 2 champs à populate, seul le 2ème est pris en compte
         },
       })
       .then(dataWalkEvents => {

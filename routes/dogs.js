@@ -8,14 +8,27 @@ const Dog = require("../models/dogs");
 
 // get dig by ID
 router.get("/getdogbyid/:id", (req, res) => {
+  let dogIdArray = ["65d5e5c3a5ad1ab25e3f2fda","65dcf5c875eecc277a12af0d"];
   if (!req.params.id) {
     res.json({ result: false, error: 'No valid id has been send' });
   } else {
-    Dog.findById(req.params.id)
+    Dog.find({_id: { $in: dogIdArray }})
     .populate('userID')
     .populate('breedID')
-    .then(dog => {
-      if (dog === null) {
+    .then(dogs => {
+      res.json({ dogs: dogs.map(dog => {
+        return ( {
+          dogID : dog._id,
+          dogName : dog.dogName,
+          isFemale : dog.isFemale, 
+          photoUri : dog.dogPhotos.uri,
+          username : dog.userID.username,
+          userPhoto : dog.userID.photos
+        }
+        
+        )})
+      });
+      /* if (dog === null) {
         res.json({ result: false, error: "No dog with this id found" });
       } else {
         dogID = dog._id;
@@ -33,7 +46,7 @@ router.get("/getdogbyid/:id", (req, res) => {
           username,
           userPhoto,
         }});
-      }
+      } */
     });
   }  
 });
